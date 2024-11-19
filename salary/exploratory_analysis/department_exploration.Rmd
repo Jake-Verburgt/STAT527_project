@@ -1,0 +1,79 @@
+---
+title: "Salary data department feature exploration"
+author: "Mohammad Almerri"
+date: "2024-11-17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#clear existing environment objects
+rm(list=ls())
+library("tidyverse")
+library("RnavGraphImageData")
+library(purrr)
+```
+
+## The department feature
+
+Loading the data:
+
+```{r, echo=TRUE}
+    
+data <- tibble(read.csv("salary.csv"))
+
+```
+
+The department feature has the following amount of unique names:
+
+```{r, echo=TRUE}
+
+unique_departments <- unique(data$department)
+print(length(unique_departments))
+    
+```
+
+We need some way to lower the number of classes, either by merging or introducing a new column.
+
+Starting with cleaning the dept names.
+
+## Data proprocessing
+
+### Convert to lower case
+
+```{r, echo=TRUE}
+
+data <- data %>%
+  mutate(department_clean = tolower(department))
+    
+```
+
+### Remove punctuaiton and special chars
+
+```{r, echo=TRUE}
+
+data <- data %>%
+  mutate(department_clean = str_replace_all(department_clean, "[[:punct:]\\d]", ""))
+
+    
+```
+
+### Remove punctuaiton and special chars
+
+```{r, echo=TRUE}
+
+data <- data %>%
+  mutate(department_clean = str_replace_all(department_clean, "[[:punct:]\\d]", ""))
+
+    
+```
+
+### Trim Whitespace
+
+```{r, echo=TRUE}
+
+data <- data %>%
+  mutate(department_clean = str_squish(department_clean))
+
+    
+```
