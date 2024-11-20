@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 #clear existing environment objects
 rm(list=ls())
 library("tidyverse")
-library("RnavGraphImageData")
 library(purrr)
 ```
 
@@ -58,15 +57,6 @@ data <- data %>%
     
 ```
 
-### Remove punctuaiton and special chars
-
-```{r, echo=TRUE}
-
-data <- data %>%
-  mutate(department_clean = str_replace_all(department_clean, "[[:punct:]\\d]", ""))
-
-    
-```
 
 ### Trim Whitespace
 
@@ -76,4 +66,24 @@ data <- data %>%
   mutate(department_clean = str_squish(department_clean))
 
     
+```
+
+### Using text mining to identify abbreviations
+
+```{r, echo=TRUE}
+
+# Tokenize the department names
+library(tidytext)
+
+data_tokens <- data %>%
+  unnest_tokens(word, department_clean)
+
+# Calculate term frequencies
+term_frequencies <- data_tokens %>%
+  count(word, sort = TRUE)
+
+# View the most frequent terms
+head(term_frequencies, 50)
+
+
 ```
